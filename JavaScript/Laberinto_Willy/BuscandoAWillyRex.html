@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscando a Wally</title>
+    <style>
+
+        body {
+            background-image: url(img/buscando-wally.jpg);
+            background-size: 100vw 100vh;
+            background-repeat: no-repeat;
+        }
+
+        div {
+            position: fixed;
+            right: 715px;
+            top: 345px;
+            width: 10px;
+            height: 10px;
+        }
+
+        .cuadroTexto {
+            background-color:#090b78;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 110px;
+            height: 20px;
+            text-align: center;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wally-encontrado"></div>
+    <script>
+      
+        document.addEventListener("mousedown", (e) => {
+            // limpieza de la consola al hacer click
+            let divWally = document.getElementById("wally-encontrado");
+            let div2 = divWally.getBoundingClientRect();
+
+            // Uso del teorema de Pitagoras
+            let resta = Math.pow(e.clientX - div2.x, 2) + Math.pow(e.clientY - div2.y, 2);
+            let distancia = Math.sqrt(resta);
+            let distanciaFinal = Math.floor(distancia);
+            let ganaste = true;
+
+            
+            //texto
+            function cuadroTexto(texto) {
+                let x = e.clientX;
+                let y = e.clientY;
+
+                let div = document.createElement("div");
+                div.innerHTML = texto;
+                
+                // posicion al hacer click
+                div.style.position = "absolute";
+                div.style.left = x + "px";
+                div.style.top = y + "px";
+                div .style.right = "100px"
+                div.classList.add('cuadroTexto');
+                let body = document.getElementsByTagName('body')[0];
+                body.append(div);
+                setTimeout(() => {
+                    
+                    // eliminacion del texto, al cabo de 1s
+                    let cuadroTexto = document.getElementsByClassName('cuadroTexto')[0];
+                    cuadroTexto.parentNode.removeChild(cuadroTexto);
+                }, 1000);
+            }
+
+
+            function mostrarImagen(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            document.body.appendChild(img); //añadir imagen al body
+            }
+
+            //funcion para determinar el tipo de imagen
+            function mostrarResultado() {
+                if (ganaste) {
+                    mostrarImagen('img/willy.png');
+                }
+            }
+
+
+
+
+            //muestra un mensaje especifico, segun el mensaje obtenido
+            function mostrarMensaje(mensaje) {
+                if (mensaje === "aqui estamos :)") {
+                    ganaste = true;
+                    mostrarResultado();
+                }
+            }
+
+
+            // Este console.log lo deje para poder ajustar a mi parecer el momento de cuando sale los mensajes
+            console.log(distanciaFinal);
+            let texto;
+            if (distanciaFinal < 35) {
+                texto = "aqui estamos :)";
+                mostrarMensaje("aqui estamos :)");
+                alert('!!ME ENCONTRASTE');
+                cuadroTexto(texto);
+
+            }
+            else if (distanciaFinal >= 35 && distanciaFinal <= 300) {
+                texto = "Caliente";
+                cuadroTexto(texto);
+            }
+            else if (distanciaFinal >= 300 && distanciaFinal <= 600) {
+                texto = "Templado";
+                cuadroTexto(texto);
+            }
+            else {
+                texto = "Frio frio";
+                cuadroTexto(texto);
+            }
+
+          
+        });
+    </script>
+</body>
+</html>

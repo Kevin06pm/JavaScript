@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+        <link href="https://fonts.cdnfonts.com/css/minecraft-3" rel="stylesheet">
+        <meta charset="UTF-8">
+		<title>Pokemon fight</title>
+		<script src="jQuery/jquery-3.4.1.min.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/styles.css">
+        <script src="js/script.js"></script>
+
+
+    </head>
+
+
+
+	<body style="background-color: rgb(0, 0, 0);">
+
+            <video autoplay muted loop id="video-background">
+                <source src="img/fondo_inicio2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        
+            <div id="content">
+                <h1>¡Bienvenido al combate Pokémon!</h1>
+            </div>
+            <!------------------------------------------------------------------------------------------------------------>
+
+            <div class="huiste"></div>
+
+
+            <!------------------------------------------------------------------------------------------------------------>
+            <div id="fight" style="display: none; background-image: url('img/fondo_batalla1.jpg');">
+                <div id="opponent">
+                    <img id="platform2" src="img/Deep_Water.webp">
+                    <img id="enemy" src="https://img.pokemondb.net/sprites/emerald/shiny/articuno.png" alt="enemy"></a>
+                </div>
+
+                <div id="estado_enemigo" style="background-image: url('img/estado_enemigos.jpg');">
+                    
+                    <div style="position:absolute; top:10px; left: 40px;">ARTICUNO</div>
+                    <div id='vida_enemigo' style="position:relative; top:71%; left: 46%; background-color:green; width: 46%; height: 17%;" ></div>
+                    <!-- VIDA AMARILLA -->
+                    <!-- <div id='vida_enemigo2' style="display:none; position:relative; top:54%; left: 46%; background-color:yellow; width: 17%; height: 17%;" ></div> -->
+
+
+                </div>
+
+               
+                <!--------------------------------------------------------------------------------->
+
+                <div id="myzone">
+                    <img id="platform1" src="img/Deep_Water.webp">
+                    <!-- <img id="mypokemon" src="img/entrenador1.png"/> -->
+                    <img id="mypokemon" src="img/pikachu.png"/>
+                    <img id="aura_electrica" src="img/aura_electrica.png"/>
+
+                </div>
+                
+               
+                <div id="estado_miPokemon"  style="background-image: url('img/estado_miPokemon.jpg');">
+                    
+                    <div style="position:absolute; top:10px; left: 40px;">PIKACHU</div>
+                    <div style="position:relative; top:54%; left: 48%; background-color: green; width: 46%; height: 13%;" >
+                    </div>
+                    <!--------------------------->
+                    <div style="position:absolute; top:72%; left: 60%; color: black; font-size:80px;">142</div>
+                    <!--------------------------->
+
+                    <div style="position:absolute; top:72%; left: 75%; color: black; font-size:80px;"><b>/</b>142</div>
+
+
+                    
+                </div>
+
+            </div>
+
+            <!------------------------------------------------------------------------------------------------------------>
+
+            <div class="close" id="ui" style="visibility: hidden;">
+                <div class="close" id="infoBox" style="background-image: url('img/texto_informacion.png');">
+                    <div id="mainBox">
+                        <div id="mainText" style="position: relative; left: 2%;">What should PIKACHU do?</div>
+                    </div>
+                    <!-- <div id="attacks" style="display:  none;">
+                        <div class="attackBox"><h1 class="actionText">THUNDER BOLT</h1></div>
+                        <div class="attackBox"><h1 class="actionText">THUNDER WAVE</h1></div>
+                        <div class="attackBox"><h1 class="actionText">AGILITY</h1></div>
+                        <div class="attackBox"><h1 class="actionText">TACKLE</h1></div>
+
+                        <div id="triangleDiv"><img src="img/Right_triangle.png" class="triangle" id="triangle1"/></div>
+                        <div id="triangleDiv"><img src="img/Right_triangle.png" class="triangle" id="triangle2"/></div>
+                        <div id="triangleDiv"><img src="img/Right_triangle.png" class="triangle" id="triangle3"/></div>
+                        <div id="triangleDiv"><img src="img/Right_triangle.png" class="triangle" id="triangle4"/></div>
+                    </div> -->
+                </div>
+                <div>
+                    
+                </div>
+                <!-- <div class="close" id="actions">
+                    <div class="actionBox" id="fightButton"><h1 class="actionText">FIGHT</h1></div>
+                    <div class="actionBox"><h1 class="actionText">BAG</h1></div>
+                    <div class="actionBox"><h1 class="actionText">POKEMON</h1></div>
+                    <div class="actionBox"><h1 class="actionText">RUN</h1></div>
+                    
+                    <div class="selector" id="selector1"></div>
+                    <div class="selector" id="selector2"></div>
+                    <div class="selector" id="selector3"></div>
+                    <div class="selector" id="selector4"></div>               
+                </div> -->
+            </div>
+
+
+        
+            <!------------------------- CONSOLA DE BATALLA ----------------------------->
+            <div class="caja_externa" style="background-image: url('img/consola_combate.jpg'); visibility: hidden;">
+
+
+                <div class="consola_combate" id="huir" style="background-image: url('img/boton_huir.png');"></div>
+                <button class="consola_combate" id="luchar" style="background-image: url('img/boton_lucharr.jpg');"></button>
+                <button class="consola_combate" id="bolsa" style="background-image: url('img/boton_bolsa.png');"></button>
+                <button class="consola_combate" id="bolsa_pokemon" style="background-image: url('img/boton_pokemon.png');"></button>
+
+                <!----------------------------------- MOVIMIENTOS DE LUCHA ---------------------------------------->
+
+                <button class="movimientos" id="thunder_bolt"><div style="position: relative; top:20%">THUNDER BOLT</div></button>
+                <button class="movimientos" id="thunder_wave"><div style="position: relative; top:20%">THUNDER WAVE</div></button>
+                <button class="movimientos" id="agility"><div style="position: relative; top:20%;">AGILITY</div></button>
+                <button class="movimientos" id="tackle" ><div style="position: relative; top:20%">TACKLE</div></button>
+                <button class="salir" style="background-image: url('img/salir.jpg'); visibility: hidden;"></button>
+
+                <!----------------------------------- OBJETOS DE LA BOLSA ---------------------------------------->
+
+                <button class="bolsas" id="restaurar" style="background-image: url('img/bolsa_restaurar.png');"></button>
+                <button class="bolsas" id="pokeballs" style="background-image: url('img/bolsa_pokebolas.png');"></button>
+                <button class="bolsas" id="curacion_estados" style="background-image: url('img/bolsa_estados.png');"></button>
+                <button class="bolsas" id="objeto_combate" style="background-image: url('img/bolsa_combate.png');"></button>
+                <button class="bolsas" id="ultimo_objeto_usado" style="background-image: url('img/ultimo_objeto_usado.png'); visibility: hidden;"></button>
+                <button class="salir2"  style="background-image: url('img/boton_atras2.png'); visibility: hidden;"></button>
+
+                <!----------------------------------- LISTA DE POKEMONS ---------------------------------------->
+                
+                <div class="misPokemons" id="ditto" style="background-image: url('img/pokebola_ditto.png');">
+                    <div style="position:absolute; left: 50%; top: 10%;"><b>DITTO</b></div>
+                </div>
+
+
+                <div class="misPokemons" id="rampardos" style="background-image: url('img/pokemon_debil1.png');"></div>
+                <div class="misPokemons" id="bagon" style="background-image: url('img/pokemon_debil2.png');"></div>
+                <div class="misPokemons" id="electrode" style="background-image: url('img/pokemon_debil3.png');"></div>
+                <div class="misPokemons" id="amuro" style="background-image: url('img/pokemon_debil4.png');"></div>
+                <div class="misPokemons" id="vacio" style="background-image: url('img/pokemon_vacio.png');"></div>
+
+                <button class="misPokemons" id="elige_pokemon" style="background-image: url('img/elige_pokemon.png'); visibility: hidden;"></button>
+                <button class="salir2"  style="background-image: url('img/boton_atras2.png'); visibility: hidden;"></button>
+
+            </div>
+
+            <!------------------------- PANTALLA DE LUCHA -------------------------------->
+
+            
+
+
+            <button id='boton_inicio'>JUGAR</button>
+        
+    </body>
+</html>
+
+

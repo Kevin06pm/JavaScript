@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        /*1- Explicar que es el CORS, en particular indicar a que se refieren por origen en la documentación oficial.
+
+        // de wikipedia :) ?
+
+        El acrónimo CORS significa "Cross-Origin Resource Sharing" (Compartir Recursos entre Orígenes Cruzados). 
+        CORS es un mecanismo de seguridad implementado por los navegadores web para restringir las solicitudes de recursos 
+        (como archivos JavaScript, imágenes, estilos, etc.) que se pueden hacer desde una página web hacia otro dominio fuera 
+        del dominio del servidor actual.
+
+        El objetivo principal de CORS es proteger a los usuarios de la web contra posibles ataques maliciosos, 
+        como la manipulación de datos confidenciales o la ejecución de acciones no autorizadas en otros sitios web.
+        
+        En el contexto de la documentación oficial, cuando se hace referencia al "origen", se refiere al dominio o protocolo 
+        desde el cual se hace una solicitud HTTP. Por ejemplo, si estás visitando un sitio web en tu navegador, el "origen" 
+        es el dominio y el protocolo de ese sitio web. Cuando se realiza una solicitud HTTP desde una página web a un recurso en otro dominio, 
+        el navegador comprueba si el servidor que aloja el recurso permite solicitudes desde ese origen particular. 
+        Si el servidor permite solicitudes desde ese origen (es decir, si está configurado con las cabeceras CORS adecuadas), 
+        la solicitud se completa correctamente. Si no, el navegador bloqueará la solicitud y mostrará un error de CORS.
+
+
+        2- Crear una página web compuesta de un formulario de entrada para buscar, dos botones para siguiente y anterior y un 
+        cuadro central para mostrar información.
+        La página mostrará el resultado de hacer una búsqueda de título mediante una petición a la API de noticias espaciales, 
+        sacará la primera noticia en el cuadro central
+        y mediante los botones de anterior y siguiente deberá permitir cambiar de noticia. De las noticias debe aparecer:
+
+		-Título 
+		-La imagen asociada
+		-URL a la noticia
+
+        Dirección API: https://spaceflightnewsapi.net/   */
+
+    </script>
+    <style>
+
+        
+        #imagen {
+            margin: 0 auto;
+            width: 50%;
+            height: auto;
+            grid-area: imagen;
+            
+        }
+
+        #enlace{
+            display: flex;
+            margin-left: 120px;
+        }
+
+    </style>
+</head>
+<body>
+   
+
+
+    <div id="noticia">
+
+        <h4 id="titulo"></h4>
+        <img src="" alt="noticia" id="imagen">
+        <a href="" class="btn btn-danger" id="enlace">enlace</a>
+
+    </div>
+
+    <br>
+
+    <button id="boton-anterior" style="background-color: aqua;">Anterior</button>
+    <button id="boton-siguiente" style="background-color:brown; color: aliceblue;" >Siguiente</button>
+
+    <input type="text" id="palabra" placeholder="buscar noticia...">
+    <input type="submit" value="Buscar" id="buscar" style="background-color:gold;">
+
+
+    <script>
+
+        //esto nos dejara poner la primera noticia cuando se carge la pagina
+        let posicion = 0;
+
+        ////////////// FUNCION PARA LA BUSQUEDA AVANZADA ///////////////////////////////
+
+
+        /// SOLICITUD AL API DEL ENLACE PRA OBTENER LAS NOTICIAS //
+        async function obtenerNoticias(palabra = '') {
+            let url = `https://api.spaceflightnewsapi.net/v4/articles/?limit=500&title_contains=${palabra}`;
+            let respuesta = await fetch(url);
+            //
+            if (respuesta.ok) {
+                let datos = await respuesta.json();
+                return datos.results;
+            } else {
+                console.error('Error al obtener noticas');
+                // devolvemos el array
+                return [];
+            }
+        }
+
+
+        /// MOSTRAR LA NOTICIA ESPECIFICADA  //
+        async function mostrarNoticia(posicion, palabra = '') {
+
+            let noticias = await obtenerNoticias(palabra);
+
+            let titulo = document.getElementById('titulo');
+            let imagen = document.getElementById('imagen');
+            let enlace = document.getElementById('enlace');
+
+            //actualizar el titulo, imagen y noticia, si hay noticias disponibles
+            if (noticias.length > 0) {
+
+                let noticia = noticias[posicion];
+
+                //
+                titulo.innerHTML = noticia.title;
+                imagen.src = noticia.image_url;
+                enlace.href = noticia.url;
+
+            } else {
+                console.error('No hay noticias');
+
+            }
+
+
+        }
+
+        /////////////////////// EVENTOS DE BOTONES Y BUSQUEDA ////////////////////////////////
+        
+        /*PD: ADEVERTENCIA :)
+        
+            Profe, la imagen incial, tarda en cargar, al igual que cuando le das a los botones
+
+        
+        */
+
+        let buscar = document.getElementById('buscar');
+        let btn_siguiente = document.getElementById('boton-siguiente');
+        let btn_anterior = document.getElementById('boton-anterior');
+
+
+        ///BUSQUEDA
+        buscar.addEventListener("click", async () => {
+            let palabra = document.getElementById('palabra').value;
+            posicion = 0;
+            await mostrarNoticia(posicion, palabra);//esperar hasta que la funcion mostranoticia este finalizada
+        });
+
+        ///BOTON SIGUIENTE
+        btn_siguiente.addEventListener("click", async () => {
+            posicion++;
+            await mostrarNoticia(posicion); //esperar hasta que la funcion mostranoticia este finalizada
+        });
+
+        ///BOTON ATRAS
+        btn_anterior.addEventListener("click", async () => {
+            posicion = Math.max(posicion - 1, 0); //actualizar posicion //con max-> la posicion no podra ser negativa
+            await mostrarNoticia(posicion); //esperar hasta que la funcion mostranoticia este finalizada
+        });
+
+
+
+        ///FIN
+        mostrarNoticia(posicion); //mostrar noticia incial con la posicion que queramos
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+    /*
+
+        -Crear función que simule petición a base de datos de bolsa:
+        -Recibirá un array con una lista de nombres de paises (por ejemplo España, Holanda, Australia...)
+        -Devolverá después de un tiempo aleatorio (entre 2 y 7 segundos) un array conformado por duplas con el nombre
+        y un valor aleatorio entre 0 y 1.
+
+        -Crear otra función que simule una petición a una base de datos meteorológica:
+        -Al cabo de un tiempo aleatorio entre 1 y 4 segundos devolverá aleatoriamente uno de los siguientes 5 valores:
+            -Soleado
+            -Nublado
+            -Lluvioso
+            -Granizando
+            -Tornado
+
+        1) Crea una página web en html que contenga dos cuadros en el centro donde salgan cada 5 segundos el tiempo actualizado y
+        los valores de las acciones de Holanda, Alemania, España, Francia y Gran Bretaña.
+
+        2) Añade la opción de que al hacer click en uno de los valores de las acciones salga el histórico de los ultimo 15 valores.
+        Añade además que aparezca en un cuadro de texto debajo de los anteriores, al hacer click fuera de este debería desaparecer.
+
+    */
+    </script>
+        
+
+        <style>
+
+            * {
+                box-sizing: border-box;
+                margin: 0px;
+                padding: 0px;
+            }
+    
+            body{
+                background-color:sienna;
+            }
+    
+            .caja_externa{
+                position: absolute;
+                top: 50%;
+                width: 600px;
+                height: 200px;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: black;
+            }
+    
+            #caja_clima{
+                position: absolute;
+                top: 57%;
+                width: 50%;
+                height: 100px;
+                left: 25%;
+                transform: translate(-50%, -50%);
+                background-color:darkcyan;
+                grid-template-columns: 2;
+                text-align: center;
+    
+            }
+            #caja_acciones{
+                
+                position: absolute;
+                top: 57%;
+                width: 50%;
+                height: 100px;
+                left: 75%;
+                transform: translate(-50%, -50%);
+                background-color:brown;
+    
+                text-align: center;
+            }
+    
+            .titulo{
+                
+                position: absolute;
+                top: 20px;
+                left: 25%;
+                color: aliceblue;
+            }
+    
+            #historial_España {
+                position: relative;
+                background-color: khaki;
+                width: 250px;
+                margin: auto;
+                height: 400px;
+                left: 67%;
+
+                text-align: center;
+                display: none;
+            }
+    
+            #historial_Noruega {
+                position: relative;
+                background-color: rgb(19, 233, 140);
+                width: 250px;
+                margin: auto;
+                height: 400px;
+                left: 67%;
+                text-align: center;
+                display: none;
+            }
+    
+            .historial_Reino_Unido {
+                position: relative;
+                background-color: rgb(225, 82, 82);
+                width: 250px;
+                margin: auto;
+                height: 400px;
+                left: 67%;
+                text-align: center;
+                display: none;
+    
+            }
+        
+            #historial_Inglaterra {
+                position: relative;
+                background-color: rgb(165, 161, 161);
+                width: 250px;
+                margin: auto;
+                height: 400px;
+                left: 67%;
+                text-align: center;
+                display: none;
+    
+            }
+    
+            #historial_Argentina {
+                position: relative;
+                background-color: rgb(132, 221, 251);
+                width: 250px;
+                margin: auto;
+                height: 400px;
+                left: 67%;
+                text-align: center;
+                display: none;
+    
+            }
+                
+        </style>
+    
+    </head>
+    <body>
+    
+        <div class="caja_externa" id="caja_externa">
+            <p class="titulo">TABLA DE CLIMAS Y ACCIONES DE PAISES</p>
+          
+            <div id="caja_clima"></div>
+            <div id="caja_acciones">
+                
+            </div>
+                <div class="historial_pais" id="historial_España"></div>
+                <div class="historial_pais" id="historial_Noruega"></div>
+                <div class="historial_Reino_Unido" id="historial_Reino Unido"></div>
+                <div class="historial_pais" id="historial_Inglaterra"></div>
+                <div class="historial_pais" id="historial_Argentina"></div>
+            </div>
+    
+        <script>
+
+        let paises = [
+
+                'España', 
+                'Noruega', 
+                'Reino Unido', 
+                'Inglaterra', 
+                'Argentina'
+            ];
+
+        ///////////////////////////////////////////////
+
+        function acciones(paises){ 
+
+            return new Promise((exito, fracaso)=>{
+
+                /////CREAMOS EL MAPA////
+
+                let misPaises = new Map(); 
+
+                //////////// TEMPORIZADOR, CON FUNCION EXITO Y ARGUMENTO 'misPaises'  ////////////////
+
+                setTimeout(()=>{
+                    ////////////// ITERA SOBRE ARRAY PAISES  //////////////////////
+                    paises.forEach(pais =>{
+                        misPaises.set(pais, duplasAleatorio()); // (España/Argentina...) , 0.2
+                    });
+                    exito(misPaises);
+                }, tiempoDeEsperaAleatorio());
+            });
+        }
+
+        /////////////////////////////////////////////////////
+
+        function datosMeterologicos(){
+            
+            let tiempos = [
+                'Soleado', 
+                'Nublado', 
+                'Lluvioso', 
+                'Granizado', 
+                'Tornado'
+            ];
+
+            return new Promise((exito, fracaso)=>{
+                setTimeout(()=>{
+                     exito(`Tiempo Metereologico: ${estadoMetereologicoAleatorio(tiempos)}`);               
+                   
+                }, tiempoMetereologicoAleatorio);
+
+            })
+        }
+
+
+
+
+        ///////////////////// FUNCIONES RANDOM  /////////////////////////////////
+
+        //Tiempo de espera al devolver paises y acciones (tiempo aleatorio entre 2 - 7)
+        function tiempoDeEsperaAleatorio(){
+            let aleatorio = Math.floor(Math.random()* (7000 - 2000) + 2000); // *(max - min) + min
+            return aleatorio;
+        }
+
+        //Valor aleatorio de las duplas entre 1 y 0
+        function duplasAleatorio(){
+            let esperar = Math.random(); //1-0
+            return esperar.toFixed(2) ; //acorta el resultado a decimales de 2
+
+        }
+
+        //Tiempo aleatorio entre 1 y 4
+        function tiempoMetereologicoAleatorio(){
+            let aleatorio = Math.random()* (3000 - 1000) + 1000; // *(max - min) + min
+            return aleatorio;
+        }
+
+        //cadena clima aleatorio
+        function estadoMetereologicoAleatorio(tiempos){
+            let estadoAleatorio = tiempos[Math.floor(Math.random()* tiempos.length)];
+            return estadoAleatorio;
+        }
+
+        ///////////////////// FUNCION RESULTADO METEOROLOGICO /////////////////////////////////
+
+
+        let resultadoMetereologico2;
+
+        async function resultadoMetereologico(){
+
+            let tiempoMetereologico = await datosMeterologicos();
+            resultadoMetereologico2 = tiempoMetereologico;
+            ////////////////////// ENCONTRAR ELEMENTO  //////////////////////////////////////////
+            let meteoTexto = document.getElementById('caja_clima');
+
+            ////////////////////// MOSTRAR   ///////////////////////////////
+
+            meteoTexto.innerHTML = `<p style=color:aliceblue;> ${tiempoMetereologico} </p>`;
+
+        }
+
+
+        ////////////////////// FUNCION RESULTADO ACCIONES///////////////////////////////
+
+
+        let resultadoAcciones2;
+
+        let historiales = {
+
+                'España' : [], 
+                'Noruega': [], 
+                'Reino Unido' : [], 
+                'Inglaterra': [], 
+                'Argentina': []
+        };
+
+        async function resultadoAcciones(){
+
+            let accionesPaises = await acciones(paises);
+            resultadoAcciones2 = accionesPaises;
+            ////////////////////// ENCONTRAR ELEMENTO  //////////////////////////////////////////
+
+            let accionesTexto = document.getElementById('caja_acciones');
+
+            ////////////////////// MOSTRAR   ///////////////////////////////
+
+            //(PARA QUE NO SE VAYAN ACUMULANDO EL ARRAY 'paises' UNO TRAS OTRO) 
+            accionesTexto.innerHTML = ''; //limpia el contenido antes de agregar nuevos elementos
+
+            accionesPaises.forEach((valor, pais)=>{ ////extraer y mostrar cada elemento del mapa en un formato adecuado
+                accionesTexto.innerHTML += `<p style=color:aliceblue;> ${pais}(${valor}) </p>`
+
+                    //guardar en array valor y eliminar si es mayor de 15 
+                    historiales[pais].push(valor);
+                    if (historiales[pais].length > 15) {
+                        historiales[pais].shift();
+                    }
+            });
+
+            ////////////////////// EVENTOS 'click' PARA MOSTRAR LOS ULTIMOS VALORES  ///////////////////////////////
+           
+             //(ACLARACION PROFE :)
+            /*
+                si das click en el pais, te mostrara sus ultimos valores, pero no se
+                actualizaran con valores nuevos en el historial, hasta que vuelvas a dar click en el pais
+            */
+
+            let accionesParrafos = accionesTexto.querySelectorAll('p');
+
+            accionesParrafos.forEach(p =>{
+                p.addEventListener('click', async ()=>{
+                    
+                    //hacemos uso del nombre del pais para acceder al elemento 
+                    let historial = document.getElementById('historial_' + p.innerText.split('(')[0]); 
+                    historial.innerHTML = ''; //limpia el contenido antes de agregar nuevos elementos
+                    
+                    //// TITULO /////
+                    historial.innerHTML += `<p> historial de: <b>${p.innerHTML}</b></p>`
+
+                    //// VALOR DE LAS ACCIONES ////
+                    historiales[p.innerText.split('(')[0]].forEach(valor => {
+                        historial.innerHTML += `<p> ${valor} </p>`;
+                    });
+                    
+                    //// APARICION DEL DIV HISTORIAL ////
+                    historial.style.display = 'block';
+                
+                    ///////////// EVENTO CLICK PARA HACER DESAPARECER EL HSITORIAL ///////////////////////
+                    let body = document.querySelector('html');
+                    let caja_externa = document.getElementById('caja_externa');
+                    let caja_clima = document.getElementById('caja_clima');
+                    let caja_paises = document.getElementById('caja_acciones');
+
+                    document.addEventListener('click',(evento)=>{
+                        // hace q el historial se oculte solo cuando se hace clic fuera de él
+                        if(evento.target === body || evento.target === caja_externa || evento.target === caja_clima || evento.target === caja_paises){ 
+                            historial.style.display='none';
+                        }
+                        
+                    });
+
+                
+                });
+
+            });
+
+        }
+        
+
+  
+
+        //FINAL
+        setInterval(resultadoMetereologico, 5000); //reinicio cada 5 segundos con datos actualizados
+        setInterval(resultadoAcciones, 5000);
+
+    </script>
+</body>
+</html>

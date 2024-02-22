@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+
+      
+
+        .caja_externa {
+
+            position: relative;
+            width: 400px;
+            height: 420px;
+            top: 60px;
+            background: url(img/fondo.jpg);
+            background-position: center center;
+
+        }
+        
+        .inicio {
+            
+            position: relative;
+            bottom: 320px;
+            left: 355px;
+            width: 45px;
+            height: 70px;
+            background-color: #fbfd63;
+            text-align: center;
+            line-height: 70px;
+        }
+
+        .div2 {
+            position: relative;
+            left: 20px;
+            width: 335px;
+            height: 30px;
+            bottom: 370px;
+
+            background-color: #47f92f;
+        }
+
+        .div3 {
+            width: 30px;
+            height: 100px;
+            background-color: #47f92f;
+            position: relative;
+            bottom: 370px;
+            left: 20px;
+        }
+
+        .trampa1 {
+            position: relative;
+            bottom: 470px;
+
+            left: 310px;
+            width: 30px;
+            height: 100px;
+            background-color: #08f100;
+        }
+
+        .div4 {
+            position: relative;
+            left: 20px;
+            width: 350px;
+            height: 30px;
+            bottom: 470px;
+            background-color: #47f92f;
+        }
+
+        .trampa2 {
+            position: relative;
+            bottom: 470px;
+
+            left: 50px;
+            width: 30px;
+            height: 120px;
+            background-color: #08f100;
+        }
+
+        .div5 {
+            position: relative;
+            bottom: 590px;
+            left: 340px;
+            width: 30px;
+            height: 120px;
+            background-color: #47f92f;
+        }
+
+        .div6 {
+            position: relative;
+            bottom: 590px;
+            left: 10px;
+            width: 360px;
+            height: 30px;
+            background-color: #47f92f;
+        }
+
+        .final {
+
+            position: relative;
+            bottom: 640px;
+            width: 40px;
+            height: 70px;
+            background-color: #fd1f1f;
+            text-align: center;
+            line-height: 70px;
+        }
+
+        img {
+
+            position: fixed; /* se mantiene fijo en la pantalla mientras se desplaza el contenido.*/
+            left: 50%;
+            max-width: 100%;
+            transform: translate(-50%, -50%); /*Esta transformación es comúnmente utilizada para centrar un elemento en la pantalla o en otro contenedor.*/
+            max-height: 100%;
+            top: 50%;
+        }
+
+        .boton{
+
+            display:inline-flex;
+            padding: 1rem 1rem;
+            background:red ;
+            color: white;
+            cursor: pointer;
+            justify-content: center;
+            font-weight: bold;
+            transition:color ease-out 0.3s; 
+            position: relative;
+            bottom: 600px;
+   
+        }
+
+        .boton:hover{
+    
+            background:rgb(0, 0, 0) ;
+            color: red;
+            border: 1px solid red;
+        
+        }
+
+        
+        
+
+    </style>
+</head>
+<body>
+
+
+    <div class="caja_externa" id="cajaExterna"></div>
+
+    <div class="inicio" id="inicio"><b>Inicio</b></div>
+    <div class="div2" id="div2"></div>
+    <div class="div3" id="div3"></div>
+    <div class="trampa1" id="trampa1"></div>
+    <div class="div4" id="div4"></div>
+    <div class="trampa2" id="trampa2"></div>
+    <div class="div5" id="div5"></div>
+    <div class="div6" id="div6"></div>
+    <div class="final" id="final"><b>Meta</b></div>
+
+    <div id ="boton" class="boton">Volver a jugar</div>
+
+   
+
+    <script>
+        
+        const cajaExterna = document.getElementById('cajaExterna');
+        const inicio = document.getElementById('inicio');
+        const trampa1 = document.getElementById('trampa1');
+        const trampa2 = document.getElementById('trampa2');
+        const final = document.getElementById('final');
+        const boton = document.getElementById('boton');
+        let perdiste = false;
+        
+
+        //Muestra la imagen en la pagina al ser llamada y pasarle la url de la image como argumento
+        function mostrarImagen(src) {
+            const img = document.createElement('img');
+            img.src = src;
+            document.body.appendChild(img); //añadir imagen al body
+        }
+
+        //funcion para determinar el tipo de imagen
+        function mostrarResultado() {
+            if (perdiste) {
+                mostrarImagen('img/perdistes.jpg');
+            } else {
+                mostrarImagen('img/ganaste.jpg');
+            }
+        }
+
+        //se reinicia la pagina
+        function resetear(){
+            perdiste = false;
+            location.reload();
+        }
+
+
+        //muestra un mensaje especifico, segun el mensaje obtenido
+        function mostrarMensaje(mensaje) {
+            if (mensaje === 'Perdiste') {
+                perdiste = true;
+                mostrarResultado();
+                
+            } else if (mensaje === 'Ganaste') {
+                mostrarResultado();
+                
+
+            }
+        }
+
+        //resetear partida
+        boton.addEventListener('click', resetear);
+
+
+ 
+
+        //Eventos de raton
+        
+        inicio.addEventListener('mouseover', function () {
+            console.log('Inicio');
+        });
+
+        trampa1.addEventListener('mouseover', function () {
+            mostrarMensaje('Perdiste');
+            alert('Ups!! camino trampa bobo');
+
+        });
+
+        trampa2.addEventListener('mouseover', function () {
+            mostrarMensaje('Perdiste');
+            alert('Ups!! camino trampa bobo');
+
+        });
+
+        
+        cajaExterna.addEventListener('mouseover', function () {
+            mostrarMensaje('Perdiste');
+
+        });
+        
+        final.addEventListener('mouseover', function (evento) {
+            mostrarMensaje('Ganaste');
+            evento.stopPropagation();
+        });  
+
+       
+    </script>
+
+</body>
+</html>
